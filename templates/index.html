@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Go-Crypto</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="#">List Harga</a>
+        <a class="nav-item nav-link" href="#">Inventori</a>
+        <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- For demo purpose -->
+<div class="container text-center text-white">
+  <div class="row pt-5">
+      <div class="col-lg-8 mx-auto">
+          <h1 class="display-4">Bootstrap table fixed header</h1>
+          <p class="lead mb-0">Build a bootstrap table with a fixed header and scrollable body using Bootstrap 4.</p>
+          <p class="lead">Snippet by <a href="https://bootstrapious.com/snippets" class="text-white">
+              <u>Bootstrapious</u></a></p>
+          </div>
+      </div>
+  </div><!-- End -->
+
+
+  <div class="container py-5">
+      <div class="row">
+          <div class="col-lg-7 mx-auto bg-white rounded shadow">
+
+              <!-- Fixed header table-->
+              <div class="table-responsive">
+                  <table class="table table-fixed">
+                      <thead>
+                          <tr>
+                              <th scope="col" class="col-3">No</th>
+                              <th scope="col" class="col-3">First</th>
+                              <th scope="col" class="col-3">Last</th>
+                              <th scope="col" class="col-3">Handle</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <!-- <tr>
+                              <th scope="row" class="col-3">1</th>
+                              <td class="col-3">Mark</td>
+                              <td class="col-3">Otto</td>
+                              <td class="col-3">@mdo</td>
+                          </tr>
+                          <tr>
+                              <th scope="row" class="col-3">2</th>
+                              <td class="col-3">Jacob</td>
+                              <td class="col-3">Thornton</td>
+                              <td class="col-3">@fat</td>
+                          </tr>
+                          <tr>
+                              <th scope="row" class="col-3">3</th>
+                              <td colspan="2" class="col-6">Larry the Bird</td>
+                              <td class="col-3">@twitter</td>
+                          </tr>
+                          <tr>
+                              <th scope="row" class="col-3">4</th>
+                              <td class="col-3">Martin</td>
+                              <td class="col-3">Williams</td>
+                              <td class="col-3">@Marty</td>
+                          </tr>
+                          <tr>
+                              <th scope="row" class="col-3">5</th>
+                              <td colspan="2" class="col-3">Sam</td>
+                              <td colspan="2" class="col-3">Pascal</td>
+                              <td class="col-3">@sam</td>
+                          </tr>
+                          <tr>
+                              <th scope="row" class="col-3">6</th>
+                              <td class="col-3">John</td>
+                              <td class="col-3">Green</td>
+                              <td class="col-3">@john</td>
+                          </tr>
+                          <tr>
+                              <th scope="row" class="col-3">7</th>
+                              <td colspan="2" class="col-3">David</td>
+                              <td colspan="2" class="col-3">Bowie</td>
+                              <td class="col-3">@david</td>
+                          </tr>
+                          <tr>
+                              <th scope="row" class="col-3">8</th>
+                              <td class="col-3">Pedro</td>
+                              <td class="col-3">Rodriguez</td>
+                              <td class="col-3">@rod</td>
+                          </tr>
+                          <tr>
+                              <th scope="row" class="col-3">5</th>
+                              <td colspan="2" class="col-3">Sam</td>
+                              <td colspan="2" class="col-3">Pascal</td>
+                              <td class="col-3">@sam</td>
+                          </tr>
+                          <tr>
+                              <th scope="row" class="col-3">10</th>
+                              <td class="col-3">Jacob</td>
+                              <td class="col-3">Thornton</td>
+                              <td class="col-3">@fat</td>
+                          </tr>
+                          <tr>
+                              <th scope="row" class="col-3">11</th>
+                              <td colspan="2" class="col-6">Larry the Bird</td>
+                              <td class="col-3">@twitter</td>
+                          </tr> -->
+                      </tbody id="listCrypto">
+                  </table>
+              </div><!-- End -->
+              
+          </div>
+      </div>
+  </div>
+
+<script>
+$(document).ready(function(){
+    tabmodiv=document.getElementById('listCrypto');
+                  var endpoint = 'api.coincap.io/v2/assets?limit=30';
+                    $.ajax({
+                    url: endpoint
+                    // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
+                    ,
+                    type:'GET',
+                    dataType: 'json',
+                    
+                    success: function(response) {
+                        content="";
+                        console.log(response)
+                            $.each(response.data, function(key, value){
+                            content+=
+                                "<tr>" +
+                                    "<td>"+value.data.rank+"</th>\n" +
+                                    "<td>"+value.data.name+"</th>\n" +
+                                    "<td>"+value.data.symbol+"</th>\n" +
+                                    "<td>"+value.data.priceUsd+"</th>\n" +
+                                "</tr>";
+                            })
+                       tabmodiv.innerHTML = content
+                    },
+                    error: function(response) {
+                        console.error(response);
+                    }
+                })
+              
+       })
+</script>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>

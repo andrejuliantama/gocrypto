@@ -1,12 +1,14 @@
-import pymysql
+
 import random
 import json
-import mysql.connector
 import http.client
 import http.server
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 import ssl
 import base64
+
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
 
 
 #USING GOJEK UNOFFICIAL WRAPPER
@@ -36,9 +38,33 @@ login_token = None
 login_data = None
 atoken = config.get_token()
 qr_trf = '5a56128c-59e1-4fd5-9b6b-df2e764b9f57'
-class RequestHandler(http.server.SimpleHTTPRequestHandler):
+class RequestHandler(BaseHTTPRequestHandler):
+    def _send_cors_headers(self):
+      """ Sets headers required for CORS """
+      self.send_header("Access-Control-Allow-Origin", "*")
+      self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+      self.send_header("Access-Control-Allow-Headers", "x-api-key,Content-Type")
+
+    def send_dict_response(self, d):
+        """ Sends a dictionary (JSON) back to the client """
+        self.wfile.write(bytes(dumps(d), "utf8"))
+
 
     def do_POST(self):
+        self.send_response(200)
+        self._send_cors_headers()
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+
+        dataLength = int(self.headers["Content-Length"])
+        data = self.rfile.read(dataLength)
+
+        print(data)
+
+        response = {}
+        response["status"] = "OK"
+        self.send_dict_response(response)
+        
         global login_token
         global login_data
         parsed_query = urlparse(self.path)
@@ -232,11 +258,11 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 port = 9977
 with HTTPServer(("",port), RequestHandler) as httpd:
     try:
-        print("serving at port ",port)
         httpd.socket = ssl.wrap_socket(httpd.socket, 
                                     keyfile = "privateKey.key", 
                                     certfile = "certificate.crt", 
                                     server_side=True)
+        print("serving at port ",port)
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("CTRL+C Pressed")
