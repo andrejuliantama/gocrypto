@@ -46,10 +46,11 @@
                   <table class="table table-fixed">
                       <thead class="fixed-head">
                           <tr class="fixed-head">
-                              <th  style="background-color: white;" class="fixed-head" scope="col" class="col-3">Rank</th>
-                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-3">Name</th>
-                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-3">Symbol</th>
-                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-3">Price in IDR</th>
+                              <th  style="background-color: white;" class="fixed-head" scope="col" class="col-1">Rank</th>
+                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-2">Name</th>
+                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Symbol</th>
+                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-5">Price in IDR</th>
+                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-3"></th>
                           </tr >
                         </thead>
                       <tbody  id="listCrypto">
@@ -114,8 +115,50 @@
         </div>
       </div>
 
+
+      <div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <a id="modalName">Name: </a><br>
+                <a id="modalCode">Code: </a><br>
+                <a id="modalPrice">Price: </a><br>
+                <a id="modalSupply">Supply: </a><br>
+                <a id="modalCap">Market Cap: </a><br>
+                <a id="modalVWAP">VWAP(24Hr): </a><br>
+                <a id="modalVolume">Volume(24Hr): </a><br>
+                <a id="modalChange">Change(24Hr): </a><br>
+              </div>
+            </form>
+          </div>
+          <!-- <div class="modal-footer">
+            <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+            <button type="button" class="btn btn-success">Submit</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+      
 <script>
 
+var dolar;
+    var listFull;
+    var listHargaIDRRaw = [];
+    var listHargaIDR = [];
+    var listSupply = [];
+    var listCap = [];
+    var listVWAP = [];
+    var listVolume = [];
+    var listChange = [];
     
 $(document).ready(function(){
 
@@ -174,8 +217,6 @@ $(document).ready(function(){
                 });
         alert("OTP has been resend")
     })
-
-    var dolar;
     
     function formatRupiah(angka){
             var prefix
@@ -193,55 +234,112 @@ $(document).ready(function(){
  
 			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
 			return prefix = 'Rp. ' + rupiah ;
+    }
+    
+    function formatAngka(angka){
+      var prefix
+			var number_string = angka.replace(/[^,\d]/g, '').toString(),
+			split   		= number_string.split(','),
+			sisa     		= split[0].length % 3,
+			rupiah     		= split[0].substr(0, sisa),
+			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+ 
+			// tambahkan titik jika yang di input sudah menjadi angka ribuan
+			if(ribuan){
+				separator = sisa ? '.' : '';
+				rupiah += separator + ribuan.join('.');
+			}
+ 
+			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+			return rupiah ;
 		}
 
     $.ajax({
-                    url: 'https://api.exchangerate-api.com/v4/latest/USD',
-                    // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
-                    type:'GET',
-                    dataType: 'json',
-                    
-                    success: function(response) {
-                        content="";
-                        console.log(response.rates.IDR)
-                            var y = parseFloat(response.rates.IDR)
-                            dolar=y
-                    },
-                    error: function(response) {
-                        console.error(response);
-                    }
-                });
+      url: 'https://api.exchangerate-api.com/v4/latest/USD',
+      // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
+      type: 'GET',
+      dataType: 'json',
 
-                tabmodiv=document.getElementById('listCrypto');
-                var endpoint = 'https://api.coincap.io/v2/assets?limit=30';
-                    $.ajax({
-                    url: endpoint,
-                    // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
-                    type:'GET',
-                    dataType: 'json',
-                    
-                    success: function(response) {
-                        content="";
-                        console.log(response.data[0].id)
-                            $.each(response.data, function(key, value){
-                            console.log(value)
-                            var x = parseFloat(value.priceUsd)
-                            content+=
-                                `<tr>
-                                    <th scope="row">`+value.rank+`</th>\n` +
-                                    '<td scope="row">'+value.name+"</td>\n" +
-                                    "<td>"+value.symbol+"</td>\n" +
-                                    "<td>"+formatRupiah((x*dolar).toFixed(0))+"</td>\n" +
-                                "</tr>";
-                            })
-                       tabmodiv.innerHTML = content
-                    },
-                    error: function(response) {
-                        console.error(response);
-                    }
-                });
-              
-       });
+      success: function (response) {
+        content = "";
+        console.log(response.rates.IDR)
+        var y = parseFloat(response.rates.IDR)
+        dolar = y
+      },
+      error: function (response) {
+        console.error(response);
+      }
+    });
+
+    tabmodiv = document.getElementById('listCrypto');
+    var endpoint = 'https://api.coincap.io/v2/assets?limit=30';
+    $.ajax({
+      url: endpoint,
+      // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
+      type: 'GET',
+      dataType: 'json',
+
+      success: function (response) {
+        content = "";
+        listFull = response;
+        console.log(listFull.data[0].rank);
+        $.each(response.data, function (key, value) {
+          var x = parseFloat(value.priceUsd);
+          var y = parseFloat(value.marketCapUsd)
+          var z = parseFloat(value.vwap24Hr)
+          var aa = parseFloat(value.volumeUsd24Hr)
+          var bb = parseFloat(value.changePercent24Hr)
+          listHargaIDR[key] = formatRupiah((x * dolar).toFixed(0));
+          listHargaIDRRaw[key] = (x*dolar).toFixed(0);
+          listSupply[key] = formatAngka(parseFloat(value.supply).toFixed(0))
+          listCap[key] = formatRupiah((y*dolar).toFixed(0));
+          listVWAP[key] = formatRupiah((z*dolar).toFixed(0));
+          listVolume[key] = formatRupiah((aa*dolar).toFixed(0));
+          listChange[key] = (bb).toFixed(2);
+          console.log(key);
+          content +=
+            `<tr>
+              <th scope="row">`+ value.rank + `</th>\n` +
+            '<td scope="row">' + value.name + "</td>\n" +
+            "<td>" + value.symbol + "</td>\n" +
+            `<td id="`+hargaIDR(key)+`"> `+listHargaIDR[key]+` </td>\n` +
+            // `<td> <button type="button" id="`+key+ `" class="btn btn-success" data-toggle="`+"modal"+`" data-target="`+"buyModal"+`"> Buy </button></td>\n` +
+            `<td> <button type="button" id="`+key+`" onClick="buyy(`+key+`)" class="btn btn-info" data-toggle="modal" data-target="#buyModal"> Detail </button></td>\n` +
+            "</tr>";
+        })
+        tabmodiv.innerHTML = content
+      },
+      error: function (response) {
+        console.error(response);
+      }
+    });
+
+    
+
+  });
+function hargaIDR(key){
+      return ('price'+listFull.data[key].rank)
+    }
+
+    function nameIDButton(key) {
+      console.log(key)
+      console.log(listFull.data[key].rank)
+      return (listFull.data[key].rank)
+      
+    }
+    
+    function buyy(id){
+      var pricee="price"+id;
+      console.log(document.getElementById('price1').val);
+      document.getElementById('modalName').innerHTML = "Name : "+listFull.data[id].name
+      document.getElementById('modalCode').innerHTML = "Code : "+listFull.data[id].symbol
+      document.getElementById('modalPrice').innerHTML = "Price : "+listHargaIDR[id]
+      document.getElementById('modalSupply').innerHTML = "Supply : "+listSupply[id]
+      document.getElementById('modalCap').innerHTML = "Market Cap : "+listCap[id]
+      document.getElementById('modalVWAP').innerHTML = "Market VWAP(24Hr) : "+listVWAP[id]
+      document.getElementById('modalVolume').innerHTML = "Volume(24Hr) : "+listVolume[id]
+      document.getElementById('modalChange').innerHTML = "Change(24Hr) : "+listChange[id]+"%"
+    }
 </script>
 <!-- 
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->

@@ -103,6 +103,8 @@
             <a id="modalCode"><strong>Code: </strong></a><br>
             <a id="modalPrice"><strong>Price: </strong></a><br>
             <a id="modalBalance"><strong>Available Balance: </strong></a><br>
+            <a id="modalBalance"><strong>Input Balance to buy: </strong></a>
+            <input type="number" style="width: 250px; padding: 5px" id="value" placeholder="Ex : 49500">
           </div>
         </form>
       </div>
@@ -116,6 +118,10 @@
 
 <script>
 
+var dolar;
+    var listFull;
+    var listHargaIDRRaw = [];
+    var listHargaIDR = [];
 
   $(document).ready(function () {
 
@@ -126,14 +132,6 @@
     $('#resendOTP').click(function () {
       alert("OTP has been resend")
     })
-
-    // function redirect(){
-    //     Window
-    // }
-
-    var dolar;
-    var listFull;
-    var listHargaIDR;
 
     function formatRupiah(angka) {
       var prefix
@@ -180,19 +178,21 @@
 
       success: function (response) {
         content = "";
-        listFull = response
-        console.log(listFull.data[0].rank)
+        listFull = response;
+        console.log(listFull.data[0].rank);
         $.each(response.data, function (key, value) {
-          var x = parseFloat(value.priceUsd)
-          console.log(key)
+          var x = parseFloat(value.priceUsd);
+          listHargaIDR[key] = formatRupiah((x * dolar).toFixed(0));
+          listHargaIDRRaw[key] = (x*dolar).toFixed(0);
+          console.log(key);
           content +=
             `<tr>
               <th scope="row">`+ value.rank + `</th>\n` +
             '<td scope="row">' + value.name + "</td>\n" +
             "<td>" + value.symbol + "</td>\n" +
-            `<td id="`+hargaIDR(key)+`"> `+formatRupiah((x * dolar).toFixed(0))+` </td>\n` +
+            `<td id="`+hargaIDR(key)+`"> `+listHargaIDR[key]+` </td>\n` +
             // `<td> <button type="button" id="`+key+ `" class="btn btn-success" data-toggle="`+"modal"+`" data-target="`+"buyModal"+`"> Buy </button></td>\n` +
-            `<td> <button type="button" id="`+key+`" onClick="`+ buyy(key) + `" class="btn btn-success" data-toggle="modal" data-target="#buyModal"> Buy </button></td>\n` +
+            `<td> <button type="button" id="`+key+`" onClick="buyy(`+key+`)" class="btn btn-success" data-toggle="modal" data-target="#buyModal"> Buy </button></td>\n` +
             "</tr>";
         })
         tabmodiv.innerHTML = content
@@ -202,7 +202,10 @@
       }
     });
 
-    function hargaIDR(key){
+    
+
+  });
+function hargaIDR(key){
       return ('price'+listFull.data[key].rank)
     }
 
@@ -213,16 +216,13 @@
       
     }
     
-    function buyy(id) {
-      var pricee="#price"+id
-      console.log(id)
-      $('#modalName').append(listFull.data[id].name)
-      $('#modalCode').append(listFull.data[id].symbol)
-      $('#modalPrice').append(pricee)
+    function buyy(id){
+      var pricee="price"+id;
+      console.log(document.getElementById('price1').val);
+      document.getElementById('modalName').innerHTML = "Name : "+listFull.data[id].name
+      document.getElementById('modalCode').innerHTML = "Code : "+listFull.data[id].symbol
+      document.getElementById('modalPrice').innerHTML = "Price : "+listHargaIDR[id]
     }
-
-  });
-
 
 </script>
 <!-- 
