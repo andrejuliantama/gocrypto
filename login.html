@@ -138,7 +138,7 @@
 
         $.ajax({
           type:'POST',
-          url: 'http:localhost:9977/transfer?amount=' + amount +'&pin=' + pin + '&cryptoname=' + cryptoname + '&symbol=' + symbol,
+          url: 'http:18.207.187.121:8080/transfer?amount=' + amount +'&pin=' + pin + '&cryptoname=' + cryptoname + '&symbol=' + symbol,
           
           crossDomain: true,       
           success: function(response) {
@@ -156,7 +156,7 @@
     $('#yes-logout').click(function() {
         $.ajax({
           type:'DELETE',
-          url: 'http:localhost:9977/logout',
+          url: 'http:18.207.187.121:8080/logout',
           crossDomain: true,       
           success: function(response) {
             console.log(response);
@@ -171,7 +171,7 @@
     
     $.ajax({
       type:'GET',
-      url: 'http:localhost:9977/balance',
+      url: 'http:18.207.187.121:8080/balance',
       crossDomain: true,       
       dataType: 'json',
       success: function(response) {
