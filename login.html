@@ -51,7 +51,7 @@
               <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Rank</th>
               <th style="background-color: white;" class="fixed-head" scope="col" class="col-2">Name</th>
               <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Symbol</th>
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-5">Price in IDR</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-6">Price in IDR</th>
               <th style="background-color: white;" class="fixed-head" scope="col" class="col-2"></th>
             </tr>
           </thead>
@@ -104,7 +104,9 @@
             <a id="modalPrice"><strong>Price: </strong></a><br>
             <a id="modalBalance"><strong>Available Balance: </strong></a><br>
             <a id="modalBalance"><strong>Input Balance to buy: </strong></a>
-            <input type="number" style="width: 250px; padding: 5px" id="value" placeholder="Ex : 49500">
+            <input type="number" min="0" style="width: 150px; height: 30px; padding: 5px" id="balanceInput" placeholder="Ex : 49500"> <br>
+            <a id="modalBalance"><strong>Input Gopay pin: </strong></a>
+            <input type="password" min="0" style="width: 100px; height: 20px; padding: 5px" id="pinInput" placeholder="6 digits">
           </div>
         </form>
       </div>
