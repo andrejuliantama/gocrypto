@@ -1,72 +1,74 @@
 <!DOCTYPE html>
 
-<script
-  src="https://code.jquery.com/jquery-3.4.1.js"
-  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script> -->
 
 <html lang="en">
+
 <head>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="style.css" rel="stylesheet">
 </head>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Go-Crypto</a>
+  <a class="navbar-brand" href="#">Go-Crypto</a>
 
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-          <li class="nav-item">
-              <a class="nav-link" href="#">Inventory</a>
-            </li>      
-            <button class="btn btn-outline-danger my-2 my-sm-0" type="button" data-toggle="modal" data-target="#exampleModalCenter" >Logout</button>
-            
-        <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
-      </div>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Inventory</a>
+      </li>
+      <button class="btn btn-outline-danger my-2 my-sm-0" type="button" data-toggle="modal"
+        data-target="#exampleModalCenter">Logout</button>
+
+      <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- For demo purpose -->
+<!-- For demo purpose -->
 <div class="container text-center text-white">
   <div class="row pt-5">
-      <div class="col-lg-8 mx-auto">
-          <h1 class="display-4">Welcome</h1>
-          <p class="lead mb-0">List of Top 30 Cryptocurrency</p>
-          </div>
-      </div>
-  </div><!-- End -->
-
-
-  <div class="container py-5">
-      <div class="row">
-          <div class="col-lg-7 mx-auto bg-white rounded shadow">
-
-              <!-- Fixed header table-->
-              <div class="table-responsive table-scrollable">
-                  <table class="table table-fixed">
-                      <thead class="fixed-head">
-                          <tr class="fixed-head">
-                              <th  style="background-color: white;" class="fixed-head" scope="col" class="col-1">Rank</th>
-                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-3">Name</th>
-                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Symbol</th>
-                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-5">Price in IDR</th>
-                              <th style="background-color: white;" class="fixed-head" scope="col" class="col-2"></th>
-                          </tr >
-                        </thead>
-                      <tbody  id="listCrypto">
-                      </tbody>
-                  </table>
-              </div><!-- End -->
-              
-          </div>
-      </div>
+    <div class="col-lg-8 mx-auto">
+      <h1 class="display-4">Welcome</h1>
+      <p class="lead mb-0">List of Top 30 Cryptocurrency</p>
+    </div>
   </div>
+</div><!-- End -->
+
+
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-7 mx-auto bg-white rounded shadow">
+
+      <!-- Fixed header table-->
+      <div class="table-responsive table-scrollable">
+        <table class="table table-fixed">
+          <thead class="fixed-head">
+            <tr class="fixed-head">
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Rank</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-2">Name</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Symbol</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-5">Price in IDR</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-2"></th>
+            </tr>
+          </thead>
+          <tbody id="listCrypto">
+          </tbody>
+        </table>
+      </div><!-- End -->
+
+    </div>
+  </div>
+</div>
 
 <!-- Button trigger modal -->
 
 <!-- Modal 1 -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -75,7 +77,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      
+
       <div class="modal-footer" style="justify-content: center;">
         <button type="button" class="btn btn-lg btn-secondary" data-dismiss="modal">No</button>
         <button id="yes-logout" type="button" class="btn btn-lg btn-danger">Yes</button>
@@ -85,134 +87,148 @@
   </div>
 </div>
 
-<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Please Input your OTP code</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                  <form>
-                    <div class="form-group">
-                      <label for="recipient-name" class="col-form-label" >OTP code</label>
-                      <input type="text" class="form-control" id="recipient-name" placeholder="6 digit number">
-                    </div>
-                  </form>
-                </div>
-            <div class="modal-footer">
-              <button id="resendOTP" type="button" class="btn btn-secondary" >Resend OTP</button>
-              <button type="button" class="btn btn-success">Submit</button>
-            </div>
-          </div>
-        </div>
+<div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Confirm your payment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <a id="modalName"><strong>Name: </strong></a><br>
+            <a id="modalCode"><strong>Code: </strong></a><br>
+            <a id="modalPrice"><strong>Price: </strong></a><br>
+            <a id="modalBalance"><strong>Available Balance: </strong></a><br>
+            <a id="modalBalance"><strong>Input Balance to buy: </strong></a>
+            <input type="number" style="width: 250px; padding: 5px" id="value" placeholder="Ex : 49500">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+        <button type="button" class="btn btn-success">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 
-    
-$(document).ready(function(){
-    $('#yes-logout').click(function() {
-        $.ajax({
-          type: "DELETE",
-          url: 'http:localhost:9977/logout',
-          crossDomain: true,
-          contentType: 'application/json',
-          dataType: 'json',
+var dolar;
+    var listFull;
+    var listHargaIDRRaw = [];
+    var listHargaIDR = [];
 
-          success: function(response) {
-              console.log(response)
-          },
-          error: function(response) {
-              console.error(response);
-          }
-      });
+  $(document).ready(function () {
+
+    $('#lanjut').click(function () {
+      $("#exampleModalCenter").modal('hide');
     })
 
-    $('#lanjut').click(function() {
-        $("#exampleModalCenter").modal('hide');
-    })
-    
-    $('#resendOTP').click(function() {
-        alert("OTP has been resend")
+    $('#resendOTP').click(function () {
+      alert("OTP has been resend")
     })
 
-    // function redirect(){
-    //     Window
-    // }
+    function formatRupiah(angka) {
+      var prefix
+      var number_string = angka.replace(/[^,\d]/g, '').toString(),
+        split = number_string.split(','),
+        sisa = split[0].length % 3,
+        rupiah = split[0].substr(0, sisa),
+        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
-    var dolar;
-    
-    function formatRupiah(angka){
-            var prefix
-			var number_string = angka.replace(/[^,\d]/g, '').toString(),
-			split   		= number_string.split(','),
-			sisa     		= split[0].length % 3,
-			rupiah     		= split[0].substr(0, sisa),
-			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
- 
-			// tambahkan titik jika yang di input sudah menjadi angka ribuan
-			if(ribuan){
-				separator = sisa ? '.' : '';
-				rupiah += separator + ribuan.join('.');
-			}
- 
-			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-			return prefix = 'Rp. ' + rupiah ;
-		}
+      // tambahkan titik jika yang di input sudah menjadi angka ribuan
+      if (ribuan) {
+        separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+      }
+
+      rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+      return prefix = 'Rp. ' + rupiah;
+    }
 
     $.ajax({
-                    url: 'https://api.exchangerate-api.com/v4/latest/USD',
-                    // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
-                    type:'GET',
-                    dataType: 'json',
-                    
-                    success: function(response) {
-                        content="";
-                        console.log(response.rates.IDR)
-                            var y = parseFloat(response.rates.IDR)
-                            dolar=y
-                    },
-                    error: function(response) {
-                        console.error(response);
-                    }
-                });
+      url: 'https://api.exchangerate-api.com/v4/latest/USD',
+      // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
+      type: 'GET',
+      dataType: 'json',
 
-                tabmodiv=document.getElementById('listCrypto');
-                var endpoint = 'https://api.coincap.io/v2/assets?limit=30';
-                    $.ajax({
-                    url: endpoint,
-                    // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
-                    type:'GET',
-                    dataType: 'json',
-                    
-                    success: function(response) {
-                        content="";
-                        console.log(response.data[0].id)
-                            $.each(response.data, function(key, value){
-                            console.log(value)
-                            var x = parseFloat(value.priceUsd)
-                            content+=
-                                `<tr>
-                                    <th scope="row">`+value.rank+`</th>\n` +
-                                    '<td scope="row">'+value.name+"</td>\n" +
-                                    "<td>"+value.symbol+"</td>\n" +
-                                    "<td>"+formatRupiah((x*dolar).toFixed(0))+"</td>\n" +
-                                    `<td> <button type="button" class="btn btn-success"> Buy </button></td>\n` +
-                                "</tr>";
-                            })
-                       tabmodiv.innerHTML = content
-                    },
-                    error: function(response) {
-                        console.error(response);
-                    }
-                });
-              
-       });
+      success: function (response) {
+        content = "";
+        console.log(response.rates.IDR)
+        var y = parseFloat(response.rates.IDR)
+        dolar = y
+      },
+      error: function (response) {
+        console.error(response);
+      }
+    });
+
+    tabmodiv = document.getElementById('listCrypto');
+    var endpoint = 'https://api.coincap.io/v2/assets?limit=30';
+    $.ajax({
+      url: endpoint,
+      // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
+      type: 'GET',
+      dataType: 'json',
+
+      success: function (response) {
+        content = "";
+        listFull = response;
+        console.log(listFull.data[0].rank);
+        $.each(response.data, function (key, value) {
+          var x = parseFloat(value.priceUsd);
+          listHargaIDR[key] = formatRupiah((x * dolar).toFixed(0));
+          listHargaIDRRaw[key] = (x*dolar).toFixed(0);
+          console.log(key);
+          content +=
+            `<tr>
+              <th scope="row">`+ value.rank + `</th>\n` +
+            '<td scope="row">' + value.name + "</td>\n" +
+            "<td>" + value.symbol + "</td>\n" +
+            `<td id="`+hargaIDR(key)+`"> `+listHargaIDR[key]+` </td>\n` +
+            // `<td> <button type="button" id="`+key+ `" class="btn btn-success" data-toggle="`+"modal"+`" data-target="`+"buyModal"+`"> Buy </button></td>\n` +
+            `<td> <button type="button" id="`+key+`" onClick="buyy(`+key+`)" class="btn btn-success" data-toggle="modal" data-target="#buyModal"> Buy </button></td>\n` +
+            "</tr>";
+        })
+        tabmodiv.innerHTML = content
+      },
+      error: function (response) {
+        console.error(response);
+      }
+    });
+
+    
+
+  });
+function hargaIDR(key){
+      return ('price'+listFull.data[key].rank)
+    }
+
+    function nameIDButton(key) {
+      console.log(key)
+      console.log(listFull.data[key].rank)
+      return (listFull.data[key].rank)
+      
+    }
+    
+    function buyy(id){
+      var pricee="price"+id;
+      console.log(document.getElementById('price1').val);
+      document.getElementById('modalName').innerHTML = "Name : "+listFull.data[id].name
+      document.getElementById('modalCode').innerHTML = "Code : "+listFull.data[id].symbol
+      document.getElementById('modalPrice').innerHTML = "Price : "+listHargaIDR[id]
+    }
+
 </script>
 <!-- 
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+  integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
