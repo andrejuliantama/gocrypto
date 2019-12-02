@@ -166,7 +166,7 @@ $(document).ready(function(){
         $("#exampleModalCenter").modal('hide');
         $.ajax({
           type: "POST",
-          url: 'http:18.207.187.121:8080/login?phone=' + document.getElementById('phonenum').value,
+          url: 'http://18.207.187.121:8080/login?phone=' + document.getElementById('phonenum').value,
           crossDomain: true,
           contentType: 'application/json',
           dataType: 'json',
@@ -183,7 +183,7 @@ $(document).ready(function(){
     $('#resendOTP').click(function() {
         $.ajax({
           type:'POST',
-          url: 'http:18.207.187.121:8080/login?phone=' + document.getElementById('phonenum').value,
+          url: 'http://18.207.187.121:8080/login?phone=' + document.getElementById('phonenum').value,
           crossDomain: true,
           contentType: 'application/json',
           dataType: 'json',
@@ -201,7 +201,7 @@ $(document).ready(function(){
     $('#submitOTP').click(function() {
         $.ajax({
           type:'POST',
-          url: 'http:18.207.187.121:8080/loginOTP?otp=' + document.getElementById('otp').value,
+          url: 'http://18.207.187.121:8080/loginOTP?otp=' + document.getElementById('otp').value,
           crossDomain: true,
           contentType: 'application/json',
           dataType: 'json',
