@@ -1,1 +1,1 @@
-{"status_code": 200, "data": {"message": "Verification code has been sent to +62xxxxxxxxx79.", "login_token": "e522b6a2-de73-41aa-b408-83aa8ea8df34", "expires_in": 900, "otp_length": 4, "next_retry": {"state": "sms", "timer_in_seconds": 30}}, "success": true, "errors": null}
+{"status_code": 200, "data": {"message": "Verification code has been sent to +62xxxxxxxxx79.", "login_token": "7327ce6c-fa09-4906-8f0b-2d09b19f3267", "expires_in": 900, "otp_length": 4, "next_retry": {"state": "sms", "timer_in_seconds": 30}}, "success": true, "errors": null}

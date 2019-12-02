@@ -103,7 +103,7 @@
             <a id="modalName"><strong>Name: </strong></a><br>
             <a id="modalCode"><strong>Code: </strong></a><br>
             <a id="modalPrice"><strong>Price: </strong></a><br>
-            <a id="modalBalance"><strong>Available Balance: </strong></a><br>
+            <a id="balance"><strong>Available Balance: </strong></a><br>
             <a id="modalBalance"><strong>Input Balance to buy: </strong></a>
             <input type="number" style="width: 250px; padding: 5px" id="value" placeholder="Ex : 49500">
           </div>
@@ -119,20 +119,41 @@
 
 <script>
 
-var dolar;
-    var listFull;
-    var listHargaIDRRaw = [];
-    var listHargaIDR = [];
+  var dolar;
+  var listFull;
+  var listHargaIDRRaw = [];
+  var listHargaIDR = [];
 
   $(document).ready(function () {
-
-    $('#lanjut').click(function () {
-      $("#exampleModalCenter").modal('hide');
+    $('#yes-logout').click(function() {
+        $.ajax({
+          type:'DELETE',
+          url: 'http:localhost:9977/logout',
+          crossDomain: true,       
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(response) {
+            console.error(response);
+          }
+        });
+        window.location.href="index.html";  
     })
+    
+    $.ajax({
+      type:'GET',
+      url: 'http:localhost:9977/balance',
+      crossDomain: true,       
+      dataType: 'json',
+      success: function(response) {
+          console.log(response);
+          $('#balance').append(response.data.balance);
+      },
+      error: function(response) {
+          console.error(response);
+      }
+    });
 
-    $('#resendOTP').click(function () {
-      alert("OTP has been resend")
-    })
 
     function formatRupiah(angka) {
       var prefix
@@ -206,7 +227,7 @@ var dolar;
     
 
   });
-function hargaIDR(key){
+    function hargaIDR(key){
       return ('price'+listFull.data[key].rank)
     }
 

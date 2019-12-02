@@ -202,7 +202,6 @@ $(document).ready(function(){
         $.ajax({
           type:'POST',
           url: 'http:localhost:9977/loginOTP?otp=' + document.getElementById('otp').value,
-          // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
           crossDomain: true,
           contentType: 'application/json',
           dataType: 'json',

@@ -27,6 +27,14 @@ def getProfile():
     }
     return request(options, 'wallet/profile')
 
+def getSaldo():
+    profile = getProfile()
+    profile = json.dumps(profile)
+    balance = profile.get("data").get("balance")
+
+    return balance
+
+
 def getHistory():
     #HISTORY 100 TRANSAKSI TERAKHIR
     options = {
@@ -37,18 +45,13 @@ def getHistory():
 login_token = None
 login_data = None
 atoken = config.get_token()
-qr_trf = '5a56128c-59e1-4fd5-9b6b-df2e764b9f57' #Punya Jason Alfian
+qr_trf = '5a56128c-59e1-4fd5-9b6b-df2e764b9f57' #Punya Jason Alfian 089658375049
 class RequestHandler(BaseHTTPRequestHandler):
     def _send_cors_headers(self):
       """ Sets headers required for CORS """
       self.send_header("Access-Control-Allow-Origin", "*")
       self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
       self.send_header("Access-Control-Allow-Headers", "X-Requested.With")
-
-    def send_dict_response(self, d):
-        """ Sends a dictionary (JSON) back to the client """
-        self.wfile.write(bytes(dumps(d), "utf8"))
-
 
     def do_POST(self):
         global login_token
@@ -205,14 +208,17 @@ class RequestHandler(BaseHTTPRequestHandler):
         query = parsed_query.query
         if path == '/balance' :
             self.send_response(200)
+            self._send_cors_headers()
             self.send_header("Content-type", "application/json")
             self.end_headers()
 
             myProfile = getProfile()
             myProfile = json.dumps(myProfile)
             self.wfile.write(myProfile.encode('utf-8'))
+
         elif path == '/history' :
             self.send_response(200)
+            self._send_cors_headers()
             self.send_header("Content-type", "application/json")
             self.end_headers()
 
