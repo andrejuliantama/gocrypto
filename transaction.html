@@ -51,10 +51,10 @@
         <table class="table table-fixed">
           <thead class="fixed-head">
             <tr class="fixed-head">
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Name</th>
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-2">Symbol</th>
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Value in Gopay</th>
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-6">Transaction ID</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">No</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-2">Name</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Symbol</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-6">Value in Gopay</th>
               <!-- <th style="background-color: white;" class="fixed-head" scope="col" class="col-2"></th> -->
             </tr>
           </thead>
@@ -90,38 +90,6 @@
   </div>
 </div>
 
-<div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Confirm your payment</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <a id="modalName"><strong>Name: </strong></a><br>
-            <a id="modalCode"><strong>Code: </strong></a><br>
-            <a id="modalPrice"><strong>Price: </strong></a><br>
-            <a id="balance"><strong>Available Balance: </strong></a><br>
-            <a id="modalBalance"><strong>Input Balance to buy: </strong></a>
-            <input type="number" min="0" style="width: 150px; height: 30px; padding: 5px" id="balanceInput" placeholder="Ex : 49500"> <br>
-            <a id="modalBalance"><strong>Input Gopay pin: </strong></a>
-            <input type="password" min="0" style="width: 100px; height: 20px; padding: 5px" id="pinInput" placeholder="6 digits">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
-        <button type="button" class="btn btn-success">Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
 
   var dolar;
@@ -144,21 +112,6 @@
         });
         window.location.href="index.html";  
     })
-    
-    $.ajax({
-      type:'GET',
-      url: 'http:localhost:9977/balance',
-      crossDomain: true,       
-      dataType: 'json',
-      success: function(response) {
-          console.log(response);
-          $('#balance').append(response.data.balance);
-      },
-      error: function(response) {
-          console.error(response);
-      }
-    });
-
 
     function formatRupiah(angka) {
       var prefix
@@ -195,64 +148,30 @@
       }
     });
 
-    tabmodiv = document.getElementById('listCrypto');
-    var endpoint = 'https://api.coincap.io/v2/assets?limit=30';
-    $.ajax({
-      url: endpoint,
-      // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
-      type: 'GET',
-      dataType: 'json',
-
-      success: function (response) {
-        content = "";
-        listFull = response;
-        console.log(listFull.data[0].rank);
-        $.each(response.data, function (key, value) {
-          var x = parseFloat(value.priceUsd);
-          listHargaIDR[key] = formatRupiah((x * dolar).toFixed(0));
-          listHargaIDRRaw[key] = (x*dolar).toFixed(0);
-          console.log(key);
-          content +=
-            `<tr>
-              <th scope="row">`+ value.rank + `</th>\n` +
-            '<td scope="row">' + value.name + "</td>\n" +
-            "<td>" + value.symbol + "</td>\n" +
-            `<td id="`+hargaIDR(key)+`"> `+listHargaIDR[key]+` </td>\n` +
-            // `<td> <button type="button" id="`+key+ `" class="btn btn-success" data-toggle="`+"modal"+`" data-target="`+"buyModal"+`"> Buy </button></td>\n` +
-            `<td> <button type="button" id="`+key+`" onClick="buyy(`+key+`)" class="btn btn-success" data-toggle="modal" data-target="#buyModal"> Buy </button></td>\n` +
-            "</tr>";
-        })
-        tabmodiv.innerHTML = content
-      },
-      error: function (response) {
-        console.error(response);
-      }
-    });
     
     tabmodiv2 = document.getElementById('listTransaction');
-    var endpoint = 'https://api.coincap.io/v2/assets?limit=30'; //Isi ama lo dre ganti data yng mw di get
+    var endpoint = 'http://localhost:9977/transaction'; 
     $.ajax({
       url: endpoint,
-      // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
       type: 'GET',
       dataType: 'json',
-
       success: function (response) {
-        content = "";
-        // listFull = response;
-        // console.log(listFull.data[0].rank);
-        $.each(response.data, function (key, value) {
+        content = ''
+        console.log(response)
+        var i = 1
+        $.each(response, function (key, value) {
         //   var x = parseFloat(value.priceUsd);
         //   listHargaIDR[key] = formatRupiah((x * dolar).toFixed(0));
         //   listHargaIDRRaw[key] = (x*dolar).toFixed(0);
         //   console.log(key);
           content += 
             `<tr>
-              <th scope="row">`+ value.rank + `</th>\n` +    //Buat name
-            '<td scope="row">' + value.name + "</td>\n" +    //Buat Symbol
-            "<td>" + value.symbol + "</td>\n" +              //Buat Value di Gopay
-            `<td id="`+hargaIDR(key)+`"> `+listHargaIDR[key]+` </td>\n` +   //Buat ID Transaction
+              <th scope="row">`+ i + `</th>\n` +    //Buat No
+            '<td scope="row">' + value.Crypto + "</td>\n" +    //Buat Name
+            "<td>" + value.Symbol + "</td>\n" +              //Buat Symbol
+            `<td> `+value.Bought+` </td>\n` +   //Value in Gopay
             "</tr>";
+          i += 1;
         })
         tabmodiv2.innerHTML = content
       },
@@ -263,6 +182,7 @@
     
 
   });
+
     function hargaIDR(key){
       return ('price'+listFull.data[key].rank)
     }

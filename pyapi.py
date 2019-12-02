@@ -50,7 +50,7 @@ def getHistory():
 login_token = None
 login_data = None
 atoken = config.get_token()
-no_hp = None
+no_hp = "081314898396"
 qr_trf = '5a56128c-59e1-4fd5-9b6b-df2e764b9f57' #Punya Jason Alfian 089658375049
 class RequestHandler(BaseHTTPRequestHandler):
     def _send_cors_headers(self):
@@ -95,7 +95,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                         self.end_headers()
                         self.wfile.write(b'{"error":true,"message":user is not registered"' )
                         return None
-                    else: #no hp terdaftar
+                    else: #no hp terdaftar  
                         self.send_response(200)
                         self._send_cors_headers()
                         self.send_header("Content-type", "application/json")
@@ -156,23 +156,12 @@ class RequestHandler(BaseHTTPRequestHandler):
                         config.set_token(atoken)
                         print("acc token: ", atoken)
                         print('Login Berhasil')
-                        
+
                         self.send_response(200)
                         self._send_cors_headers()
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
-                        self.wfile.write(b'{"error":true,"message":"OTP Benar."}')
-
-                        cursor = mydb.cursor()
-                        sql = """INSERT INTO account(Name,Phone) VALUES (%s, %s)"""                        
-                        name = customer_data.get("data").get("customer").get("name")
-                        phone = customer_data.get("data").get("customer").get("phone")
-                        no_hp = phone
-                        data = (name, phone)
-                        cursor.execute(sql, data)
-                        mydb.commit()
-
-                        
+                        self.wfile.write(b'{"error":true,"message":"OTP Benar."}')            
                 else :
                     print('Failed to Enter param \'otp\'')
                     self.send_response(422) #Unprocessable Entity
@@ -242,6 +231,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             return None
 
     def do_GET(self):
+        global no_hp
         parsed_query = urlparse(self.path)
         path = parsed_query.path
         query = parsed_query.query
@@ -270,6 +260,33 @@ class RequestHandler(BaseHTTPRequestHandler):
             print(f.write("\n"))
             self.wfile.write(myHistory.encode('utf-8'))
             f.close()
+
+        elif path == '/transaction' :
+            self.send_response(200)
+            self._send_cors_headers()
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+
+            cursor = mydb.cursor()
+            sql = """SELECT * FROM transaction WHERE Phone = %s"""
+
+            cursor.execute(sql, (no_hp,))
+            res = cursor.fetchall()
+
+            result = []
+            for row in res:
+                data = {
+                    'Phone': row[0],
+                    'Crypto': row[1],
+                    'Symbol': row[2],
+                    'Bought': row[3]
+                }
+                result.append(data)
+            data = json.dumps(result)
+            print(data)
+
+            self.wfile.write(bytes(data.encode('utf-8')))
+            
         else:
             self.send_response(404) #Not found
             self.send_header('Content-Type', 'application/json')
