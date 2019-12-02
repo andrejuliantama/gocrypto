@@ -22,7 +22,7 @@ from urllib.parse import urlparse
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="",
+  passwd="andrej",
   database="transaction_log"
 )
 
@@ -327,7 +327,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         
     
-port = 9977
+port = 8080
 with HTTPServer(("",port), RequestHandler) as httpd:
     try:
         # httpd.socket = ssl.wrap_socket(httpd.socket, 
