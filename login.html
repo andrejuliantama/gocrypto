@@ -106,17 +106,17 @@
             <a id="modalName"><strong>Name: </strong></a><br>
             <a id="modalCode"><strong>Code: </strong></a><br>
             <a id="modalPrice"><strong>Price: </strong></a><br>
-            <a id="balance"><strong>Available Balance: </strong></a><br>
-            <a id="modalBalance"><strong>Input Balance to buy: </strong></a>
-            <input type="number" min="0" style="width: 150px; height: 30px; padding: 5px" id="balanceInput" placeholder="Ex : 49500"> <br>
-            <a id="modalBalance"><strong>Input Gopay pin: </strong></a>
+            <a id="balance"><strong>Available Balance: </strong>Rp. </a><br>
+            <a id="amountModal"><strong>Input Amount to buy: </strong></a>
+            <input type="number" min="0" style="width: 150px; height: 30px; padding: 5px" id="amountInput" placeholder="Ex : 49500"> <br>
+            <a id="pin"><strong>Input Gopay pin: </strong></a>
             <input type="password" min="0" style="width: 100px; height: 20px; padding: 5px" id="pinInput" placeholder="6 digits">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
-        <button type="button" class="btn btn-success">Submit</button>
+        <button id="submitPayment" type="button" class="btn btn-success">Submit</button>
       </div>
     </div>
   </div>
@@ -130,6 +130,22 @@
   var listHargaIDR = [];
 
   $(document).ready(function () {
+    $('#submitPayment').click(function() {
+        $.ajax({
+          type:'POST',
+          url: 'http:localhost:9977/transfer?amount=' + document.getElementById('amountInput').value +'&pin=' + document.getElementById('pinInput').value,
+          crossDomain: true,       
+          success: function(response) {
+            console.log(response);
+            alert('Payment berhasil')
+          },
+          error: function(response) {
+            console.error(response);
+            alert('Payment gagal, ')
+          }
+        });
+
+    })
     $('#yes-logout').click(function() {
         $.ajax({
           type:'DELETE',
@@ -137,12 +153,13 @@
           crossDomain: true,       
           success: function(response) {
             console.log(response);
+            window.location.href="index.html";
           },
           error: function(response) {
             console.error(response);
           }
         });
-        window.location.href="index.html";  
+
     })
     
     $.ajax({
@@ -152,11 +169,13 @@
       dataType: 'json',
       success: function(response) {
           console.log(response);
-          $('#balance').append(response.data.balance);
+          saldo = response.data.balance
+          $('#balance').append(saldo);
       },
       error: function(response) {
           console.error(response);
       }
+
     });
 
 

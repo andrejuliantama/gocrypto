@@ -209,16 +209,18 @@ $(document).ready(function(){
           success: function(response) {
               console.log(response)
               alert("Berhasil Login")
+              window.location.href="login.html";
           },
           error: function(response) {
               console.error(response);
               alert("OTP Salah")
           }
+
         });
     })
     
     function formatRupiah(angka){
-            var prefix
+      var prefix
 			var number_string = angka.replace(/[^,\d]/g, '').toString(),
 			split   		= number_string.split(','),
 			sisa     		= split[0].length % 3,

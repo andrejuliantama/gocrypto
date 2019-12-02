@@ -1,4 +1,4 @@
-import mysql
+import mysql.connector
 import random
 import json
 import http.client
@@ -133,21 +133,27 @@ class RequestHandler(BaseHTTPRequestHandler):
                     otp = query_components.get('otp')
                     
                     #input OTP
-                    self.send_response(200)
-                    self._send_cors_headers()
-                    self.send_header("Content-type", "application/json")
-                    self.end_headers()
                     customer_data = generater_costumer_token(otp, login_token)
                     print(customer_data)
                     
-                    if (customer_data == None):
+                    
+                    if (customer_data.get("data") == None):
                         print("Login Gagal")
-                        exit()
+                        self.send_response(403)
+                        self._send_cors_headers()
+                        self.send_header("Content-type", "application/json")
+                        self.end_headers()
+                        self.wfile.write(b'{"error":true,"message":"OTP Salah."}')
                     else:
                         atoken = customer_data.get("data").get("access_token")
                         config.set_token(atoken)
                         print("acc token: ", atoken)
                         print('Login Berhasil')
+                        self.send_response(200)
+                        self._send_cors_headers()
+                        self.send_header("Content-type", "application/json")
+                        self.end_headers()
+                        self.wfile.write(b'{"error":true,"message":"OTP Benar."}')
                 else :
                     print('Failed to Enter param \'otp\'')
                     self.send_response(422) #Unprocessable Entity
@@ -187,8 +193,10 @@ class RequestHandler(BaseHTTPRequestHandler):
                     else:
                         #transfer
                         self.send_response(200)
+                        self._send_cors_headers()
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        self.wfile.write(b'{"error":false,"message":"Transfer Berhasil."}')
 
                         description = 'Transfer sebesar ' + amount
                         trf_gopay = transfer_gopay(qr_trf, amount, description, pin)        
@@ -246,6 +254,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         #query_components = dict(qc.split("=") for qc in query.split("&"))
         if path == '/logout' :
             self.send_response(200)
+            self._send_cors_headers()
             self.send_header("Content-type", "application/json")
             self.end_headers()
 
@@ -253,6 +262,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             print(logout_data)
             config.set_token('')
             print("Berhasil Logout")
+            self.wfile.write(b'{"error":false,"message":"Logout Succeed."}')
         else:
             self.send_response(404) #Not found
             self.send_header('Content-Type', 'application/json')
