@@ -18,10 +18,10 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" href="#">Home</a>
+            <a class="nav-link" href="login.html">Home</a>
           </li>
       <li class="nav-item">
-        <a class="nav-link" href="transaction.html">My Transaction</a>
+        <a class="nav-link" href="#">My Transaction</a>
       </li>
       <button class="btn btn-outline-danger my-2 my-sm-0" type="button" data-toggle="modal"
         data-target="#exampleModalCenter">Logout</button>
@@ -36,7 +36,7 @@
   <div class="row pt-5">
     <div class="col-lg-8 mx-auto">
       <h1 class="display-4">Welcome</h1>
-      <p class="lead mb-0">List of Top 30 Cryptocurrency</p>
+      <p class="lead mb-0">List of your transaction</p>
     </div>
   </div>
 </div><!-- End -->
@@ -51,14 +51,14 @@
         <table class="table table-fixed">
           <thead class="fixed-head">
             <tr class="fixed-head">
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Rank</th>
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-2">Name</th>
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Symbol</th>
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-6">Price in IDR</th>
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-2"></th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Name</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-2">Symbol</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Value in Gopay</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-6">Transaction ID</th>
+              <!-- <th style="background-color: white;" class="fixed-head" scope="col" class="col-2"></th> -->
             </tr>
           </thead>
-          <tbody id="listCrypto">
+          <tbody id="listTransaction">
           </tbody>
         </table>
       </div><!-- End -->
@@ -106,17 +106,17 @@
             <a id="modalName"><strong>Name: </strong></a><br>
             <a id="modalCode"><strong>Code: </strong></a><br>
             <a id="modalPrice"><strong>Price: </strong></a><br>
-            <a id="balance"><strong>Available Balance: </strong>Rp. </a><br>
-            <a id="amountModal"><strong>Input Amount to buy: </strong></a>
-            <input type="number" min="0" style="width: 150px; height: 30px; padding: 5px" id="amountInput" placeholder="Ex : 49500"> <br>
-            <a id="pin"><strong>Input Gopay pin: </strong></a>
+            <a id="balance"><strong>Available Balance: </strong></a><br>
+            <a id="modalBalance"><strong>Input Balance to buy: </strong></a>
+            <input type="number" min="0" style="width: 150px; height: 30px; padding: 5px" id="balanceInput" placeholder="Ex : 49500"> <br>
+            <a id="modalBalance"><strong>Input Gopay pin: </strong></a>
             <input type="password" min="0" style="width: 100px; height: 20px; padding: 5px" id="pinInput" placeholder="6 digits">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
-        <button id="submitPayment" type="button" class="btn btn-success">Submit</button>
+        <button type="button" class="btn btn-success">Submit</button>
       </div>
     </div>
   </div>
@@ -130,28 +130,6 @@
   var listHargaIDR = [];
 
   $(document).ready(function () {
-    $('#submitPayment').click(function() {
-        var amount = document.getElementById('amountInput').value
-        var pin = document.getElementById('pinInput').value
-        var cryptoname = document.getElementById('modalName').innerHTML.split(': ')[1]
-        var symbol = document.getElementById('modalCode').innerHTML.split(': ')[1]
-
-        $.ajax({
-          type:'POST',
-          url: 'http:localhost:9977/transfer?amount=' + amount +'&pin=' + pin + '&cryptoname=' + cryptoname + '&symbol=' + symbol,
-          
-          crossDomain: true,       
-          success: function(response) {
-            console.log(response);
-            alert('Payment berhasil')
-          },
-          error: function(response) {
-            console.error(response);
-            alert('Payment gagal, ')
-          }
-        });
-
-    })
     $('#yes-logout').click(function() {
         $.ajax({
           type:'DELETE',
@@ -159,13 +137,12 @@
           crossDomain: true,       
           success: function(response) {
             console.log(response);
-            window.location.href="index.html";
           },
           error: function(response) {
             console.error(response);
           }
         });
-
+        window.location.href="index.html";  
     })
     
     $.ajax({
@@ -175,13 +152,11 @@
       dataType: 'json',
       success: function(response) {
           console.log(response);
-          saldo = response.data.balance
-          $('#balance').append(saldo);
+          $('#balance').append(response.data.balance);
       },
       error: function(response) {
           console.error(response);
       }
-
     });
 
 
@@ -253,7 +228,38 @@
         console.error(response);
       }
     });
+    
+    tabmodiv2 = document.getElementById('listTransaction');
+    var endpoint = 'https://api.coincap.io/v2/assets?limit=30'; //Isi ama lo dre ganti data yng mw di get
+    $.ajax({
+      url: endpoint,
+      // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
+      type: 'GET',
+      dataType: 'json',
 
+      success: function (response) {
+        content = "";
+        // listFull = response;
+        // console.log(listFull.data[0].rank);
+        $.each(response.data, function (key, value) {
+        //   var x = parseFloat(value.priceUsd);
+        //   listHargaIDR[key] = formatRupiah((x * dolar).toFixed(0));
+        //   listHargaIDRRaw[key] = (x*dolar).toFixed(0);
+        //   console.log(key);
+          content += 
+            `<tr>
+              <th scope="row">`+ value.rank + `</th>\n` +    //Buat name
+            '<td scope="row">' + value.name + "</td>\n" +    //Buat Symbol
+            "<td>" + value.symbol + "</td>\n" +              //Buat Value di Gopay
+            `<td id="`+hargaIDR(key)+`"> `+listHargaIDR[key]+` </td>\n` +   //Buat ID Transaction
+            "</tr>";
+        })
+        tabmodiv2.innerHTML = content
+      },
+      error: function (response) {
+        console.error(response);
+      }
+    });
     
 
   });
