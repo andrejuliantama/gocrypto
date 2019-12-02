@@ -1,4 +1,4 @@
-
+import mysql
 import random
 import json
 import http.client
@@ -37,13 +37,13 @@ def getHistory():
 login_token = None
 login_data = None
 atoken = config.get_token()
-qr_trf = '5a56128c-59e1-4fd5-9b6b-df2e764b9f57'
+qr_trf = '5a56128c-59e1-4fd5-9b6b-df2e764b9f57' #Punya Jason Alfian
 class RequestHandler(BaseHTTPRequestHandler):
     def _send_cors_headers(self):
       """ Sets headers required for CORS """
       self.send_header("Access-Control-Allow-Origin", "*")
       self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
-      self.send_header("Access-Control-Allow-Headers", "x-api-key,Content-Type")
+      self.send_header("Access-Control-Allow-Headers", "X-Requested.With")
 
     def send_dict_response(self, d):
         """ Sends a dictionary (JSON) back to the client """
@@ -51,20 +51,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
     def do_POST(self):
-        self.send_response(200)
-        self._send_cors_headers()
-        self.send_header("Content-Type", "application/json")
-        self.end_headers()
-
-        dataLength = int(self.headers["Content-Length"])
-        data = self.rfile.read(dataLength)
-
-        print(data)
-
-        response = {}
-        response["status"] = "OK"
-        self.send_dict_response(response)
-        
         global login_token
         global login_data
         parsed_query = urlparse(self.path)
@@ -85,25 +71,37 @@ class RequestHandler(BaseHTTPRequestHandler):
                 param = query.split('=')[0]
                 if param == 'phone':
                     print('IN: Parameter \'phone\'')
-                    self.send_response(200)
-                    self.send_header("Content-type", "application/json")
-                    self.end_headers()
 
                     #login with phone Number
                     phone = query_components.get('phone')
                     countryCode = '+62'
                     phoneNum = countryCode + phone[1:]
                     login_data = login_with_phone(phoneNum)
+
+                    #jika no hp tidak terdaftar
+                    if (login_data.get("data") == None):
+                        self.send_response(401)
+                        self._send_cors_headers()
+                        self.send_header("Content-type", "application/json")
+                        self.end_headers()
+                        self.wfile.write(b'{"error":true,"message":user is not registered"' )
+                        return None
+                    else: #no hp terdaftar
+                        self.send_response(200)
+                        self._send_cors_headers()
+                        self.send_header("Content-type", "application/json")
+                        self.end_headers()
+                        login_token = login_data.get("data").get("login_token")
+                        login_data = json.dumps(login_data)
+
+                        #Login Log
+                        f = open("output_login_log.json", "w")
+                        print(f.write(login_data))
+                        print(f.write("\n"))
+                        self.wfile.write(login_data.encode('utf-8'))
+                        f.close()
+
                     print(login_data)
-                    login_token = login_data.get("data").get("login_token")
-                    login_data = json.dumps(login_data)
-                
-                    #Login Log
-                    f = open("output_login_log.json", "w")
-                    print(f.write(login_data))
-                    print(f.write("\n"))
-                    self.wfile.write(login_data.encode('utf-8'))
-                    f.close()
                     
                 else :
                     print('Failed to Enter param \'phone\'')
@@ -131,18 +129,20 @@ class RequestHandler(BaseHTTPRequestHandler):
                     #Assign OTP dari SMS (manual)
                     otp = query_components.get('otp')
                     
-                    #intput OTP
+                    #input OTP
+                    self.send_response(200)
+                    self._send_cors_headers()
+                    self.send_header("Content-type", "application/json")
+                    self.end_headers()
                     customer_data = generater_costumer_token(otp, login_token)
                     print(customer_data)
-                    #Akun sudah login
                     
-                    atoken = customer_data.get("data").get("access_token")
-                    config.set_token(atoken)
-                    
-                    if (atoken == None):
+                    if (customer_data == None):
                         print("Login Gagal")
                         exit()
                     else:
+                        atoken = customer_data.get("data").get("access_token")
+                        config.set_token(atoken)
                         print("acc token: ", atoken)
                         print('Login Berhasil')
                 else :
@@ -253,15 +253,23 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b'{"error":true,"message":"no such path."}')
             return None
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        # self.send_header("Content-type", "application/json")
+        self.send_header("Access-Control-Allow-Origin","*")
+        self.send_header("Access-Control-Allow-Methods","GET,POST,OPTIONS,DELETE")
+        self.send_header("Access-Control-Allow-Headers","X-Requested-With, Content-Type")
+        self.end_headers()
         
     
 port = 9977
 with HTTPServer(("",port), RequestHandler) as httpd:
     try:
-        httpd.socket = ssl.wrap_socket(httpd.socket, 
-                                    keyfile = "privateKey.key", 
-                                    certfile = "certificate.crt", 
-                                    server_side=True)
+        # httpd.socket = ssl.wrap_socket(httpd.socket, 
+        #                             keyfile = "privateKey.key", 
+        #                             certfile = "certificate.crt", 
+        #                             server_side=True)
         print("serving at port ",port)
         httpd.serve_forever()
     except KeyboardInterrupt:
