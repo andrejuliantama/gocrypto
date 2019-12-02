@@ -51,7 +51,7 @@
               <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Rank</th>
               <th style="background-color: white;" class="fixed-head" scope="col" class="col-2">Name</th>
               <th style="background-color: white;" class="fixed-head" scope="col" class="col-1">Symbol</th>
-              <th style="background-color: white;" class="fixed-head" scope="col" class="col-5">Price in IDR</th>
+              <th style="background-color: white;" class="fixed-head" scope="col" class="col-6">Price in IDR</th>
               <th style="background-color: white;" class="fixed-head" scope="col" class="col-2"></th>
             </tr>
           </thead>
@@ -104,14 +104,16 @@
             <a id="modalCode"><strong>Code: </strong></a><br>
             <a id="modalPrice"><strong>Price: </strong></a><br>
             <a id="balance"><strong>Available Balance: </strong>Rp. </a><br>
-            <a id="amount"><strong>Input Amount to buy: </strong></a>
-            <input type="number" style="width: 250px; padding: 5px" id="value" placeholder="Ex : 49500">
+            <a id="amountModal"><strong>Input Amount to buy: </strong></a>
+            <input type="number" min="0" style="width: 150px; height: 30px; padding: 5px" id="amountInput" placeholder="Ex : 49500"> <br>
+            <a id="pin"><strong>Input Gopay pin: </strong></a>
+            <input type="password" min="0" style="width: 100px; height: 20px; padding: 5px" id="pinInput" placeholder="6 digits">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
-        <button type="button" class="btn btn-success">Submit</button>
+        <button id="submitPayment" type="button" class="btn btn-success">Submit</button>
       </div>
     </div>
   </div>
@@ -125,6 +127,22 @@
   var listHargaIDR = [];
 
   $(document).ready(function () {
+    $('#submitPayment').click(function() {
+        $.ajax({
+          type:'POST',
+          url: 'http:localhost:9977/transfer?amount=' + document.getElementById('amountInput').value +'&pin=' + document.getElementById('pinInput').value,
+          crossDomain: true,       
+          success: function(response) {
+            console.log(response);
+            alert('Payment berhasil')
+          },
+          error: function(response) {
+            console.error(response);
+            alert('Payment gagal, ')
+          }
+        });
+
+    })
     $('#yes-logout').click(function() {
         $.ajax({
           type:'DELETE',

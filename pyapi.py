@@ -193,8 +193,10 @@ class RequestHandler(BaseHTTPRequestHandler):
                     else:
                         #transfer
                         self.send_response(200)
+                        self._send_cors_headers()
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        self.wfile.write(b'{"error":false,"message":"Transfer Berhasil."}')
 
                         description = 'Transfer sebesar ' + amount
                         trf_gopay = transfer_gopay(qr_trf, amount, description, pin)        
@@ -260,6 +262,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             print(logout_data)
             config.set_token('')
             print("Berhasil Logout")
+            self.wfile.write(b'{"error":false,"message":"Logout Succeed."}')
         else:
             self.send_response(404) #Not found
             self.send_header('Content-Type', 'application/json')
