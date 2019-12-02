@@ -103,13 +103,13 @@
                   <form>
                     <div class="form-group">
                       <label for="recipient-name" class="col-form-label" >OTP code</label>
-                      <input type="text" class="form-control" id="recipient-name" placeholder="6 digit number">
+                      <input type="text" class="form-control" id="otp" placeholder="4 digit number">
                     </div>
                   </form>
                 </div>
             <div class="modal-footer">
               <button id="resendOTP" type="button" class="btn btn-secondary" >Resend OTP</button>
-              <button id="submitOTP" type="button" class="btn btn-success" onclick="window.location='login.html'">Submit</button>
+              <button id="submitOTP" type="button" class="btn btn-success" >Submit</button>
             </div>
           </div>
         </div>
@@ -165,57 +165,56 @@ $(document).ready(function(){
     $('#submit').click(function() {
         $("#exampleModalCenter").modal('hide');
         $.ajax({
-                    url: 'https:localhost:9977/login/phone?=' + document.getElementById('phonenum').value,
-                    // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
-                    type: "POST",
-                    contentType: 'application/json',
-                    crossDomain: true,
-                    dataType: 'json',
+          type: "POST",
+          url: 'http:localhost:9977/login?phone=' + document.getElementById('phonenum').value,
+          crossDomain: true,
+          contentType: 'application/json',
+          dataType: 'json',
 
-                    
-                    success: function(response) {
-                        console.log(response)
-                    },
-                    error: function(response) {
-                        console.error(response);
-                    }
-                });
+          success: function(response) {
+              console.log(response)
+          },
+          error: function(response) {
+              console.error(response);
+          }
+      });
     })
     
     $('#resendOTP').click(function() {
         $.ajax({
-                    url: 'https:localhost:9977/login/' + document.getElementById('phonenum').value,
-                    // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
-                    type:'POST',
-                    dataType: 'json',
-                    
-                    success: function(response) {
-                        content="";
-                        console.log(response)
-                    },
-                    error: function(response) {
-                        console.error(response);
-                    }
-                });
-        alert("OTP has been resend")
+          type:'POST',
+          url: 'http:localhost:9977/login?phone=' + document.getElementById('phonenum').value,
+          crossDomain: true,
+          contentType: 'application/json',
+          dataType: 'json',
+          
+          success: function(response) {
+              console.log(response)
+          },
+          error: function(response) {
+              console.error(response);
+          }
+        });
+        alert("OTP has been resent")
     })
 
     $('#submitOTP').click(function() {
         $.ajax({
-                    url: 'https:localhost:9977/loginOTP/' + document.getElementById('phonenum').value,
-                    // +'/'+encodeURIComponent(document.getElementById('tipependaftaran').value)
-                    type:'POST',
-                    dataType: 'json',
-                    
-                    success: function(response) {
-                        content="";
-                        console.log(response)
-                    },
-                    error: function(response) {
-                        console.error(response);
-                    }
-                });
-        alert("OTP has been resend")
+          type:'POST',
+          url: 'http:localhost:9977/loginOTP?otp=' + document.getElementById('otp').value,
+          crossDomain: true,
+          contentType: 'application/json',
+          dataType: 'json',
+          
+          success: function(response) {
+              console.log(response)
+              alert("Berhasil Login")
+          },
+          error: function(response) {
+              console.error(response);
+              alert("OTP Salah")
+          }
+        });
     })
     
     function formatRupiah(angka){
