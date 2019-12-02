@@ -19,7 +19,12 @@ from config import (set_token, get_token)
 #import utk parsing url path
 from urllib.parse import urlparse
 
-
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  passwd="",
+  database="transaction_log"
+)
 
 def getProfile():
     options = {
@@ -45,6 +50,7 @@ def getHistory():
 login_token = None
 login_data = None
 atoken = config.get_token()
+no_hp = None
 qr_trf = '5a56128c-59e1-4fd5-9b6b-df2e764b9f57' #Punya Jason Alfian 089658375049
 class RequestHandler(BaseHTTPRequestHandler):
     def _send_cors_headers(self):
@@ -125,6 +131,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 return None
             else:
                 global atoken
+                global no_hp
                 param = query.split('=')[0]
                 if param == 'otp':
                     print('IN: Parameter \'otp\'')
@@ -149,11 +156,23 @@ class RequestHandler(BaseHTTPRequestHandler):
                         config.set_token(atoken)
                         print("acc token: ", atoken)
                         print('Login Berhasil')
+                        
                         self.send_response(200)
                         self._send_cors_headers()
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
                         self.wfile.write(b'{"error":true,"message":"OTP Benar."}')
+
+                        cursor = mydb.cursor()
+                        sql = """INSERT INTO account(Name,Phone) VALUES (%s, %s)"""                        
+                        name = customer_data.get("data").get("customer").get("name")
+                        phone = customer_data.get("data").get("customer").get("phone")
+                        no_hp = phone
+                        data = (name, phone)
+                        cursor.execute(sql, data)
+                        mydb.commit()
+
+                        
                 else :
                     print('Failed to Enter param \'otp\'')
                     self.send_response(422) #Unprocessable Entity
@@ -181,6 +200,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                     print('Akun siap transfer')
                     amount = query_components.get('amount') 
                     pin = query_components.get('pin')
+                    crypto = query_components.get('cryptoname')
+                    symbol = query_components.get('symbol')
 
                     if (amount == None or pin == None):
                         #error
@@ -201,6 +222,16 @@ class RequestHandler(BaseHTTPRequestHandler):
                         description = 'Transfer sebesar ' + amount
                         trf_gopay = transfer_gopay(qr_trf, amount, description, pin)        
                         
+                        cursor = mydb.cursor()
+                        sql = """INSERT INTO transaction(Phone,Crypto,Symbol,Bought) VALUES (%s, %s, %s, %s)"""         
+
+                        phone = no_hp
+                        
+                        data = (phone, crypto, symbol, amount)
+                        
+                        cursor.execute(sql, data)
+                        mydb.commit()
+
                         print('Transfer Sukses')
 
         else:

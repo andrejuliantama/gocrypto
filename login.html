@@ -128,9 +128,15 @@
 
   $(document).ready(function () {
     $('#submitPayment').click(function() {
+        var amount = document.getElementById('amountInput').value
+        var pin = document.getElementById('pinInput').value
+        var cryptoname = document.getElementById('modalName').innerHTML.split(': ')[1]
+        var symbol = document.getElementById('modalCode').innerHTML.split(': ')[1]
+
         $.ajax({
           type:'POST',
-          url: 'http:localhost:9977/transfer?amount=' + document.getElementById('amountInput').value +'&pin=' + document.getElementById('pinInput').value,
+          url: 'http:localhost:9977/transfer?amount=' + amount +'&pin=' + pin + '&cryptoname=' + cryptoname + '&symbol=' + symbol,
+          
           crossDomain: true,       
           success: function(response) {
             console.log(response);

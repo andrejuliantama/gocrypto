@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2019 at 10:25 AM
+-- Generation Time: Dec 02, 2019 at 04:16 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.11
 
@@ -30,8 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `account` (
   `Name` varchar(50) NOT NULL,
-  `Phone` varchar(15) NOT NULL,
-  `Balance` int(20) NOT NULL
+  `Phone` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -44,7 +43,6 @@ CREATE TABLE `transaction` (
   `Phone` varchar(15) NOT NULL,
   `Crypto` varchar(50) NOT NULL,
   `Symbol` varchar(10) NOT NULL,
-  `Price` int(11) NOT NULL,
   `Bought` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -69,10 +67,10 @@ ALTER TABLE `transaction`
 --
 
 --
--- Constraints for table `account`
+-- Constraints for table `transaction`
 --
-ALTER TABLE `account`
-  ADD CONSTRAINT `account_ibfk_1` FOREIGN KEY (`Phone`) REFERENCES `transaction` (`Phone`);
+ALTER TABLE `transaction`
+  ADD CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`Phone`) REFERENCES `account` (`Phone`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
