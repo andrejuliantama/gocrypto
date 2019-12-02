@@ -103,8 +103,8 @@
             <a id="modalName"><strong>Name: </strong></a><br>
             <a id="modalCode"><strong>Code: </strong></a><br>
             <a id="modalPrice"><strong>Price: </strong></a><br>
-            <a id="balance"><strong>Available Balance: </strong></a><br>
-            <a id="modalBalance"><strong>Input Balance to buy: </strong></a>
+            <a id="balance"><strong>Available Balance: </strong>Rp. </a><br>
+            <a id="amount"><strong>Input Amount to buy: </strong></a>
             <input type="number" style="width: 250px; padding: 5px" id="value" placeholder="Ex : 49500">
           </div>
         </form>
@@ -132,12 +132,13 @@
           crossDomain: true,       
           success: function(response) {
             console.log(response);
+            window.location.href="index.html";
           },
           error: function(response) {
             console.error(response);
           }
         });
-        window.location.href="index.html";  
+
     })
     
     $.ajax({
@@ -147,11 +148,13 @@
       dataType: 'json',
       success: function(response) {
           console.log(response);
-          $('#balance').append(response.data.balance);
+          saldo = response.data.balance
+          $('#balance').append(saldo);
       },
       error: function(response) {
           console.error(response);
       }
+
     });
 
 
