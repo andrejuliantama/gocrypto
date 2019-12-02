@@ -101,7 +101,7 @@
     $('#yes-logout').click(function() {
         $.ajax({
           type:'DELETE',
-          url: 'http:localhost:9977/logout',
+          url: 'http://18.207.187.121:8080/logout',
           crossDomain: true,       
           success: function(response) {
             console.log(response);
@@ -150,7 +150,7 @@
 
     
     tabmodiv2 = document.getElementById('listTransaction');
-    var endpoint = 'http://localhost:9977/transaction'; 
+    var endpoint = 'http://18.207.187.121:8080/transaction'; 
     $.ajax({
       url: endpoint,
       type: 'GET',
