@@ -26,6 +26,7 @@ mydb = mysql.connector.connect(
   database="transaction_log"
 )
 
+
 def getProfile():
     options = {
         'method' : 'GET'
@@ -50,7 +51,7 @@ def getHistory():
 login_token = None
 login_data = None
 atoken = config.get_token()
-no_hp = "081314898396"
+no_hp = ""
 qr_trf = '5a56128c-59e1-4fd5-9b6b-df2e764b9f57' #Punya Jason Alfian 089658375049
 class RequestHandler(BaseHTTPRequestHandler):
     def _send_cors_headers(self):
@@ -296,6 +297,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         global atoken
+        global no_hp
         parsed_query = urlparse(self.path)
         path = parsed_query.path
         query = parsed_query.query
@@ -309,6 +311,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             logout_data = logout()
             print(logout_data)
             config.set_token('')
+            no_hp = ''
             print("Berhasil Logout")
             self.wfile.write(b'{"error":false,"message":"Logout Succeed."}')
         else:
